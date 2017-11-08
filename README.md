@@ -6,22 +6,22 @@ This project uses 6 [SparkFun Large Digit Drivers](https://www.sparkfun.com/prod
 
 First, we need to set up NTP on the Raspberry Pi.
 
-'sudo apt-get install ntp'
+`sudo apt-get install ntp`
 
-Then, if you want to, you can configure your own time servers in '/etc/ntp.conf', but it will work just fine with the stock Debian NTP Pool servers.
-'sudo nano /etc/ntp.conf'
+Then, if you want to, you can configure your own time servers in `/etc/ntp.conf`, but it will work just fine with the stock Debian NTP Pool servers.
+`sudo nano /etc/ntp.conf`
 
 After changing the NTP conf, you need to restart the NTP deamon
 
-'sudo /etc/init.d/ntpd restart'
+`sudo /etc/init.d/ntpd restart`
 
-Make sure your clock is running correctly by running the 'date' command
+Make sure your clock is running correctly by running the `date` command
 
-'date'
+`date`
 
 Also remember to set your timezone
 
-'sudo dpkg-reconfigure tzdata'
+`sudo dpkg-reconfigure tzdata`
 
 ## Copying the Repository
 
