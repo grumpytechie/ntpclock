@@ -43,6 +43,7 @@ print (time.strftime('%H:%M:%S'))
 while True:
 
     # First timed loop to shift out current time every tenth of a second with DP off.
+    # Timer1 sets the time the DP is on and off, in 100ms increments
     Timer1 = 9
     while Timer1 >= 0:
         Timestr = time.strftime('%H:%M:%S')
