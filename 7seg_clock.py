@@ -47,7 +47,6 @@ while True:
     while Timer1 >= 0:
         Timestr = time.strftime('%H:%M:%S')
         Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
-        print(Data1)
 
         # Send data to the shift registers
         Shift = 47
@@ -69,8 +68,8 @@ while True:
         Timer1 -= 1
 
     # Second timed loop for 1 sec with decimal points (DP) turned on between hours and minutes, and minutes and seconds
-    Timer2 = 9
-    while Timer2 >= 0:
+    Timer1 = 9
+    while Timer1 >= 0:
         Timestr = time.strftime('%H:%M:%S')
         Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
 
@@ -95,4 +94,4 @@ while True:
         GPIO.output(LatchPin, GPIO.LOW)
         GPIO.output(LatchPin, GPIO.HIGH)
         time.sleep(.1)
-        Timer2 -= 1
+        Timer1 -= 1
