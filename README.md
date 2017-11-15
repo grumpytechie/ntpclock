@@ -30,9 +30,11 @@ Also remember to set your timezone
 Copy the ntpclock.sh file to an appropriate directory on you Raspberry Pi, in my example I've created a new folder under /usr/local/ named ntpclock
 
 Edit /etc/rc.local
+
 `sudo nano /etc/rc.local`
 
 and add the following line to the bottom
+
 `/usr/local/ntpclock/ntpclock.sh &`
 
 
