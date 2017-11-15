@@ -1,6 +1,15 @@
 # ntpclock
 
-This project uses 6 [SparkFun Large Digit Drivers](https://www.sparkfun.com/products/13279) to drive 6 [SparkFun 6.5" 7-Segment Displays](https://www.sparkfun.com/products/8530) using a Raspberry Pi and a [SparkFun Logic Level Converter](https://www.sparkfun.com/products/12009)
+This project uses a Raspberry Pi show NTP diciplned time on 6 7-Segment LED displays
+
+## Bill of Materials
+
+* 6 [SparkFun Large Digit Drivers](https://www.sparkfun.com/products/13279) 
+* 6 [SparkFun 6.5" 7-Segment Displays](https://www.sparkfun.com/products/8530) 
+* 1 Raspberry Pi 
+* 1 [SparkFun Logic Level Converter](https://www.sparkfun.com/products/12009)
+* 5 VDC power supply capable of 3 A
+* 12 VDC power supply capable of 2 A
 
 ## Setting up NTP
 
