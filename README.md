@@ -49,4 +49,4 @@ and add the following line to the bottom
 
 ## Wiring Everything Up
 
-![Wiring Diagram](/clock-wiring.png?raw=true "Wiring Diagram")
+![Wiring Diagram](clock-wiring.PNG?raw=true "Wiring Diagram")
