@@ -1,8 +1,10 @@
 # ntpclock
-#
+# 
 # A simple Raspberry Pi project that uses shift registers to
 # display time on 7-segment displays.
-# GrumpyTechie - 2017
+#
+# Copyright 2017 GrumpyTechie
+# Licensed under the EUPL
 
 import RPi.GPIO as GPIO
 import time
