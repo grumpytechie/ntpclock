@@ -3,7 +3,7 @@
 # A simple Raspberry Pi project that uses shift registers to
 # display time on 7-segment displays.
 #
-# Copyright 2017 GrumpyTechie
+# Copyright 2017 GrumpyTechie.net
 # Licensed under the EUPL
 
 import RPi.GPIO as GPIO
@@ -27,6 +27,18 @@ GPIO.output(ClockPin,GPIO.LOW)
 GPIO.output(LatchPin,GPIO.LOW)
 
 # Segments definitions for SparkFun Large Digit Driver
+#
+# Standard 7-segment layout is the following
+#
+# **aaaa**
+# *f****b*
+# *f****b*
+# **gggg**
+# *e****c*
+# *e****c*
+# **dddd**DP
+#
+# Segments are arranged as a,f,g,e,d,c,b,DP
 Nums = {'0':[1,1,0,1,1,1,1,0],
     '1':[0,0,0,0,0,1,1,0],
 	'2':[1,0,1,1,1,0,1,0],
@@ -38,63 +50,78 @@ Nums = {'0':[1,1,0,1,1,1,1,0],
 	'8':[1,1,1,1,1,1,1,0],
 	'9':[1,1,1,0,1,1,1,0]}
 
-print ('the current time is:')
-print (time.strftime('%H:%M:%S'))
+print('Starting ntpclock')
+print('The current time is:')
+print(time.strftime('%H:%M:%S'))
 
-# main loop
-while True:
+try:
+    while True:
 
-    # First timed loop to shift out current time every tenth of a second with DP off.
-    # Timer1 sets the time the DP is on and off, in 100ms increments
-    Timer1 = 9
-    while Timer1 >= 0:
-        Timestr = time.strftime('%H:%M:%S')
-        Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
+        # First timed loop to shift out current time every tenth of a second with DP off.
+        # Timer1 sets the time the DP is on and off, in 100ms increments
+        Timer1 = 9
+        while Timer1 >= 0:
+            Timestr = time.strftime('%H:%M:%S')
+            Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
 
-        # Send data to the shift registers
-        Shift = 47
-        while Shift >= 0:
-            GPIO.output(DataPin, GPIO.LOW)
+            # Send data to the shift registers
+            Shift = 47
+            while Shift >= 0:
+                GPIO.output(DataPin, GPIO.LOW)
 
-            # Determine if bit is set or clear
-            if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
+                # Determine if bit is set or clear
+                if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
 
-            # Advance the clock
-            GPIO.output(ClockPin, GPIO.LOW)
-            GPIO.output(ClockPin, GPIO.HIGH)
-            Shift -= 1
+                # Advance the clock
+                GPIO.output(ClockPin, GPIO.LOW)
+                GPIO.output(ClockPin, GPIO.HIGH)
+                Shift -= 1
 
-        # Latch and display the output
-        GPIO.output(LatchPin, GPIO.LOW)
-        GPIO.output(LatchPin, GPIO.HIGH)
-        time.sleep(.1)
-        Timer1 -= 1
+            # Latch and display the output
+            GPIO.output(LatchPin, GPIO.LOW)
+            GPIO.output(LatchPin, GPIO.HIGH)
+            time.sleep(.1)
+            Timer1 -= 1
 
-    # Second timed loop for 1 sec with decimal points (DP) turned on between hours and minutes, and minutes and seconds
-    Timer1 = 9
-    while Timer1 >= 0:
-        Timestr = time.strftime('%H:%M:%S')
-        Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
+        # Second timed loop for 1 sec with decimal points (DP)
+        # turned on between hours and minutes, and minutes and seconds
+        Timer1 = 9
+        while Timer1 >= 0:
+            Timestr = time.strftime('%H:%M:%S')
+            Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
 
-        # Set bits 16 and 32 high to turn on DPs
-        Data1[15] = 1
-        Data1[31] = 1
+            # Set bits 16 and 32 high to turn on DPs
+            Data1[15] = 1
+            Data1[31] = 1
 
-        # Send data to the shift registers
-        Shift = 47
-        while Shift >= 0:
-            GPIO.output(DataPin, GPIO.LOW)
+            # Send data to the shift registers
+            Shift = 47
+            while Shift >= 0:
+                GPIO.output(DataPin, GPIO.LOW)
 
-            # Determine if bit is high or low
-            if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
+                # Determine if bit is high or low
+                if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
 
-            # Advance the clock
-            GPIO.output(ClockPin, GPIO.LOW)
-            GPIO.output(ClockPin, GPIO.HIGH)
-            Shift -= 1
+                # Advance the clock
+                GPIO.output(ClockPin, GPIO.LOW)
+                GPIO.output(ClockPin, GPIO.HIGH)
+                Shift -= 1
 
-        # Latch and display the output
-        GPIO.output(LatchPin, GPIO.LOW)
-        GPIO.output(LatchPin, GPIO.HIGH)
-        time.sleep(.1)
-        Timer1 -= 1
+            # Latch and display the output
+            GPIO.output(LatchPin, GPIO.LOW)
+            GPIO.output(LatchPin, GPIO.HIGH)
+            time.sleep(.1)
+            Timer1 -= 1
+
+except KeyboardInterrupt:
+    # Handling of CTRL+C cleanly
+    print('Interupted by user, exiting at ')
+    print(time.strftime('%H:%M:%S'))
+
+except:
+    # Handling any other exceptions
+    print('Unknown error occured, exiting at ')
+    print(time.strftime('%H:%M:%S'))
+
+finally:
+    GPIO.cleanup()  # this ensures a clean exit
