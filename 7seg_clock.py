@@ -1,5 +1,5 @@
 # ntpclock
-# 
+#
 # A simple Raspberry Pi project that uses shift registers to
 # display time on 7-segment displays.
 #
@@ -40,63 +40,63 @@ GPIO.output(LatchPin,GPIO.LOW)
 #
 # Segments are arranged as a,f,g,e,d,c,b,DP
 Nums = {'0':[1,1,0,1,1,1,1,0],
-    '1':[0,0,0,0,0,1,1,0],
-	'2':[1,0,1,1,1,0,1,0],
-	'3':[1,0,1,0,1,1,1,0],
-	'4':[0,1,1,0,0,1,1,0],
-	'5':[1,1,1,0,1,1,0,0],
-	'6':[1,1,1,1,1,1,0,0],
-	'7':[1,0,0,0,0,1,1,0],
-	'8':[1,1,1,1,1,1,1,0],
-	'9':[1,1,1,0,1,1,1,0]}
+        '1':[0,0,0,0,0,1,1,0],
+        '2':[1,0,1,1,1,0,1,0],
+        '3':[1,0,1,0,1,1,1,0],
+        '4':[0,1,1,0,0,1,1,0],
+        '5':[1,1,1,0,1,1,0,0],
+        '6':[1,1,1,1,1,1,0,0],
+        '7':[1,0,0,0,0,1,1,0],
+        '8':[1,1,1,1,1,1,1,0],
+        '9':[1,1,1,0,1,1,1,0]}
 
 print('Starting ntpclock')
 print('The current time is:')
 print(time.strftime('%H:%M:%S'))
 
 try:
-    while True:
+   while True:
+      # Get time and format time string
+      Timestr = time.strftime('%H:%M:%S')
 
-	# Get time and format time string
-	Timestr = time.strftime('%H:%M:%S')
+      #Form payload
+      Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
 
-	#Form payload
-	Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
+      # Set bits 16 and 32 high to turn on decimal points between hours/minutes and minutes/seconds if the final digit is divisible by 2
+      lastSec = int(Timestr[7])
+      if lastSec % 2 == 0:
+         Data1[15] = 1
+         Data1[31] = 1
+      else:
+         Data1[15] = 0
+         Data1[31] = 0
 
-	# Set bits 16 and 32 high to turn on decimal points between hours/minutes and minutes/seconds if the final digit is divisible by 2
-	if (Timestr[7] % 2) == 0:
-            Data1[15] = 1
-            Data1[31] = 1
-	else: 
-	    Data1[15] = 0
-            Data1[31] = 0
+      # Send data to the shift registers
+      Shift = 47
+      while Shift >= 0:
+         GPIO.output(DataPin, GPIO.LOW)
 
-        # Send data to the shift registers
-            Shift = 47
-            while Shift >= 0:
-                GPIO.output(DataPin, GPIO.LOW)
+         # Determine if bit is set or clear
+         if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
 
-                # Determine if bit is set or clear
-                if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
+         # Advance the clock
+         GPIO.output(ClockPin, GPIO.LOW)
+         GPIO.output(ClockPin, GPIO.HIGH)
+         Shift -= 1
 
-                # Advance the clock
-                GPIO.output(ClockPin, GPIO.LOW)
-                GPIO.output(ClockPin, GPIO.HIGH)
-                Shift -= 1
+      # Latch and display the output
+      GPIO.output(LatchPin, GPIO.LOW)
+      GPIO.output(LatchPin, GPIO.HIGH)
 
-            # Latch and display the output
-            GPIO.output(LatchPin, GPIO.LOW)
-            GPIO.output(LatchPin, GPIO.HIGH)
-		
 except KeyboardInterrupt:
-    # Handling of CTRL+C cleanly
-    print('Interupted by user, exiting at ')
-    print(time.strftime('%H:%M:%S'))
+   # Handling of CTRL+C cleanly
+   print('Interupted by user, exiting at ')
+   print(time.strftime('%H:%M:%S'))
 
 except:
-    # Handling any other exceptions
-    print('Unknown error occured, exiting at ')
-    print(time.strftime('%H:%M:%S'))
+   # Handling any other exceptions
+   print('Unknown error occured, exiting at ')
+   print(time.strftime('%H:%M:%S'))
 
 finally:
-    GPIO.cleanup()  # this ensures a clean exit
+   GPIO.cleanup()  # this ensures a clean exit
