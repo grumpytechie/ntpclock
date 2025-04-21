@@ -3,7 +3,7 @@
 # A simple Raspberry Pi project that uses shift registers to
 # display time on 7-segment displays.
 #
-# Copyright 2017 GrumpyTechie.net
+# Copyright 2017-2025 GrumpyTechie.net
 # Licensed under the EUPL
 
 import RPi.GPIO as GPIO
