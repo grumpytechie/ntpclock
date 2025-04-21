@@ -57,14 +57,21 @@ print(time.strftime('%H:%M:%S'))
 try:
     while True:
 
-        # First timed loop to shift out current time every tenth of a second with DP off.
-        # Timer1 sets the time the DP is on and off, in 100ms increments
-        Timer1 = 9
-        while Timer1 >= 0:
-            Timestr = time.strftime('%H:%M:%S')
-            Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
+	# Get time and format time string
+	Timestr = time.strftime('%H:%M:%S')
 
-            # Send data to the shift registers
+	#Form payload
+	Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
+
+	# Set bits 16 and 32 high to turn on decimal points between hours/minutes and minutes/seconds if the final digit is divisible by 2
+	if (Timestr[7] % 2) == 0:
+            Data1[15] = 1
+            Data1[31] = 1
+	else: 
+	    Data1[15] = 0
+            Data1[31] = 0
+
+        # Send data to the shift registers
             Shift = 47
             while Shift >= 0:
                 GPIO.output(DataPin, GPIO.LOW)
@@ -80,39 +87,7 @@ try:
             # Latch and display the output
             GPIO.output(LatchPin, GPIO.LOW)
             GPIO.output(LatchPin, GPIO.HIGH)
-            time.sleep(.1)
-            Timer1 -= 1
-
-        # Second timed loop for 1 sec with decimal points (DP)
-        # turned on between hours and minutes, and minutes and seconds
-        Timer1 = 9
-        while Timer1 >= 0:
-            Timestr = time.strftime('%H:%M:%S')
-            Data1 = Nums[Timestr[0]] + Nums[Timestr[1]] + Nums[Timestr[3]] + Nums[Timestr[4]] + Nums[Timestr[6]] + Nums[Timestr[7]]
-
-            # Set bits 16 and 32 high to turn on DPs
-            Data1[15] = 1
-            Data1[31] = 1
-
-            # Send data to the shift registers
-            Shift = 47
-            while Shift >= 0:
-                GPIO.output(DataPin, GPIO.LOW)
-
-                # Determine if bit is high or low
-                if Data1[Shift] == 1: GPIO.output(DataPin, GPIO.HIGH)
-
-                # Advance the clock
-                GPIO.output(ClockPin, GPIO.LOW)
-                GPIO.output(ClockPin, GPIO.HIGH)
-                Shift -= 1
-
-            # Latch and display the output
-            GPIO.output(LatchPin, GPIO.LOW)
-            GPIO.output(LatchPin, GPIO.HIGH)
-            time.sleep(.1)
-            Timer1 -= 1
-
+		
 except KeyboardInterrupt:
     # Handling of CTRL+C cleanly
     print('Interupted by user, exiting at ')
