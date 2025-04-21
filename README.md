@@ -36,13 +36,25 @@ Also remember to set your timezone
 
 ## Setting the Python Code to Run at Startup
 
-Copy the ntpclock.sh file to an appropriate directory on you Raspberry Pi, in my example I've created a new folder under /usr/local/ named ntpclock
+### Crontab Method
+Copy the 7seg_clock.py file to an appropriate directory on your Raspberry Pi, in my example I've created a new folder under /usr/local/ named ntpclock
+
+Edit /etc/crontab
+
+`sudo nano /etc/crontab`
+
+Add the following line to the bottom
+
+`@reboot  root  /usr/local/ntpclock/7seg_clock.py &` 
+
+### rc.local Method - Deprecated since Debian Bookworm
+Copy the ntpclock.sh file to an appropriate directory on your Raspberry Pi, in my example I've created a new folder under /usr/local/ named ntpclock
 
 Edit /etc/rc.local
 
 `sudo nano /etc/rc.local`
 
-and add the following line to the bottom
+Add the following line to the bottom
 
 `/usr/local/ntpclock/ntpclock.sh &`
 
