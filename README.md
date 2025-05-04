@@ -1,6 +1,6 @@
 # ntpclock
 
-This project uses a Raspberry Pi show NTP diciplned time on 6 7-Segment LED displays
+This project uses a Raspberry Pi to show NTP disciplined time on 6 7-Segment LED displays
 
 ## Bill of Materials
 
