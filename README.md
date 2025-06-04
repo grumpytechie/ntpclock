@@ -1,7 +1,7 @@
 # ntpclock
 
 This project uses a Raspberry Pi to show NTP disciplined time on 6 7-Segment LED displays
-[TOC]
+
 ## Bill of Materials
 
 * 6 [SparkFun Large Digit Drivers](https://www.sparkfun.com/products/13279) 
