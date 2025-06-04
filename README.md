@@ -50,7 +50,7 @@ Edit /etc/crontab
 
 Add the following line to the bottom:  
 
-`@reboot  root  /usr/local/ntpclock/7seg_clock.py &` 
+`@reboot  root python /usr/local/ntpclock/7seg_clock.py &` 
 
 ### rc.local Method - Deprecated since Debian Bookworm
 Copy the `ntpclock.sh` file to an appropriate directory on your Raspberry Pi, in my example, I've created a new folder under `/usr/local/` named `ntpclock`
