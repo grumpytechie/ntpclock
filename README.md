@@ -18,6 +18,7 @@ First, we need to set up NTP on the Raspberry Pi.
 `sudo apt-get install ntp`
 
 Then, if you want to, you can configure your own time servers in `/etc/ntp.conf`, but it will work just fine with the stock Debian NTP Pool servers.
+
 `sudo nano /etc/ntp.conf`
 
 After changing the NTP conf, you need to restart the NTP deamon
