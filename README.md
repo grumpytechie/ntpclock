@@ -21,11 +21,15 @@ Then, if you want to, you can configure your own time servers in `/etc/ntp.conf`
 
 `sudo nano /etc/ntp.conf`
 
-After changing the NTP conf, you need to restart the NTP deamon
+After changing the NTP conf, you need to restart the NTP daemon.
+
+`sudo systemctl restart ntp`
+
+Or on older systems using init.d:
 
 `sudo /etc/init.d/ntpd restart`
 
-Make sure your clock is running correctly by running the `date` command
+Make sure your clock is running correctly by running the `date` command.
 
 `date`
 
